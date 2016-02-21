@@ -1,0 +1,89 @@
+﻿getwd()
+activity<-read.csv(“https://www.coursera.org/learn/reproducible-research/peer/gYyPt/course-project-1”)
+activity<-read.table(“activity.csv”,header=TRUE) str(activity)
+names(activity) str(activity) head(activity,10) what is the total number
+of steps taken perday 2. Tranforming the data so subsetting data frame
+to remove na without_na<-activity[complete.cases(activity),] a) we make
+a histogram to show the total number of steps taken in a day ##(total
+steps taken in a day) total<-aggregate(steps~date,without_na,sum)
+install.packages(“AggregateR”) library(AggregateR)
+names(total)[2]<-“sum_steps” head(total,5) ##plot the histogram
+hist(totalsum_steps,col="green",main = "Histogram of the Total Number of (Steps Taken per day))",xlab="(Total Number of (Steps Taken per day))",breaks=20) 3. Calculate and report the mean and median(total number of (steps taken per day)) ##mean mean(total
+sum_steps,col="green",main = "Histogram of the Total Number of (Steps Taken per day))",xlab="(Total Number of (Steps Taken per day))",breaks=20) 3. Calculate and report the mean and median(total number of (steps taken per day)) ##mean mean(total
+
+sum_steps) ##median
+median(totalsum_steps) 4. Time series plot of the average daily activity pattern 1)Make a time series plot(i.e. type="1")of the 5-minute interval(x-axis) and the number of steps taken, averaged across all days(y-axis) ## average number of steps taken, averaged across all days for each 5-minute interval interval<-aggregate(steps~interval,without_na,mean) ##adding the variable names names(interval)[2]<-"mean_steps" head(interval,5) ##formating plot margins for long text labels par(mar=c(1.2,1.5,1.1)) ##plot time series plot(x=interval
+sum_steps) 4. Time series plot of the average daily activity pattern 1)Make a time series plot(i.e. type="1")of the 5-minute interval(x-axis) and the number of steps taken, averaged across all days(y-axis) ## average number of steps taken, averaged across all days for each 5-minute interval interval<-aggregate(steps~interval,without_na,mean) ##adding the variable names names(interval)[2]<-"mean_steps" head(interval,5) ##formating plot margins for long text labels par(mar=c(1.2,1.5,1.1)) ##plot time series plot(x=interval
+
+interval,y=intervalmeansteps,type="l",main="TimeSeriesPlotofthe5−minuteInterval\nandtheAverageNumberofStepsTaken,AveragedAcrossAllDays",xlab="5−MinuteInterval",ylab="AverageNumberofStepsTaken,\nAveragedAcrossAllDays")2)Which5−minuteinterval,onaverageacrossallthedaysinthedataset,containsthemaximumnumberofsteps?interval[intervalmeansteps,type="l",main="TimeSeriesPlotofthe5−minuteInterval\nandtheAverageNumberofStepsTaken,AveragedAcrossAllDays",xlab="5−MinuteInterval",ylab="AverageNumberofStepsTaken,\nAveragedAcrossAllDays")2)Which5−minuteinterval,onaverageacrossallthedaysinthedataset,containsthemaximumnumberofsteps?interval[intervalmean_steps==max(intervalmeansteps),]Imputingthemissingvalues1)Calculateandreportthetotalnumberofmissingvaluesinthedataset(i.e.thetotalnumberofrowswithNAs)nrow(activity[is.na(activitymeansteps),]Imputingthemissingvalues1)Calculateandreportthetotalnumberofmissingvaluesinthedataset(i.e.thetotalnumberofrowswithNAs)nrow(activity[is.na(activitysteps),])
+2) Devise a strategy for filling in all of the missing values in the
+dataset. The strategy does not need to be sophisticated. For example,
+you could use the mean/median for that day, or the mean for that
+5-minute interval, etc. For this, I will use the mean for the 5-minute
+interval to populate NA values for a given interval 3)Create a new
+dataset that is equal to the original dataset but with the missing data
+filled in. ##merge the original activity data fram with the interval
+data frame newactivity<-merge(activity,interval,by=‘interval’,all.y=F)
+##merge NA values with averages rounding up for integers
+newactivitysteps[is.na(newactivitysteps[is.na(newactivitysteps)]<-as.integer(round(newactivitymeansteps[is.na(newactivitymeansteps[is.na(newactivitysteps)]))
+##reorder and drop colums to match the original activity data frame
+keeps<-names(activity) ##subset keeps newactivity<-newactivity[keeps]
+4.Make a histogram of the total number of steps taken each day and
+Calculate and report the mean and median total number of steps taken per
+day. Do these values differ from the estimates from the first part of
+the assignment? What is the impact of imputing missing data on the
+estimates of the total daily number of steps? ##(total number of steps
+taken per day) newtotal<-aggregate(steps~date,newactivity,sum)
+names(newtotal)[2]<-“sum_steps
+
+head(newtotal,5) ##histogram plot
+hist(newtotalsumsteps,col="orange",main="HistogramoftheTotalNumberof(stepstakeneachday))\nPartDeux",breaks=40)hist(newtotalsumsteps,col="orange",main="HistogramoftheTotalNumberof(stepstakeneachday))\nPartDeux",breaks=40)hist(newtotalsum_steps,col=“orange”,main=“Histogram
+of the Total Number of (steps taken each day))Deux”,breaks=10) ##mean
+mean(newtotalsum_steps) ##median median(newtotal
+sum_steps) ##median median(newtotal
+
+sum_steps) Do these values differ from the estimates from the first part
+of the assignment the difference is very little, becaise if you round
+off the value for the newtotal(10765.64) it is the same as the
+mean(total=10766,19 while median(total= 10765), median of
+(newtotal=10762.3) What is the impact of imputing missing data on the
+estimates of the total daily number of steps? this is dependent on the
+way the missing data in imputed. using the averages of the intervals
+gives no difference Are there differences in activity patterns between
+weekdays and weekends? 1.Create a new factor variable in the dataset
+with two levels - “weekday” and “weekend” indicating whether a given
+date is a weekday or weekend day. 2.Make a panel plot containing a time
+series plot (i.e. type = “l”) of the 5-minute interval (x-axis) and the
+average number of steps taken, averaged across all weekday days or
+weekend days (y-axis). See the README file in the GitHub repository to
+see an example of what this plot should look like using simulated data.
+1.##creating new factor variable newactivity2<-newactivity ##setting up
+logical vector
+weekend<-weekdays(as.Date(newactivity2date))date))daytype<-“weekday”
+##replace weekend with sat and sun
+newactivity2daytype[weekend==TRUE]<-"weekend" ##converting new charactor form to factor newactivity2
+daytype[weekend==TRUE]<-"weekend" ##converting new charactor form to factor newactivity2
+
+daytype<-as.factor(newactivity2daytype) ##check the structure of new data frame str(newactivity2) head(newactivity2,5) checking if a particular day is a weekend or weekdays weekdays(as.Date(newactivity2
+daytype) ##check the structure of new data frame str(newactivity2) head(newactivity2,5) checking if a particular day is a weekend or weekdays weekdays(as.Date(newactivity2
+
+date[4])) ##Dienstag means tuesday in Germany. Make a panel plot
+containing a time series plot (i.e. type = “l”) of the 5-minute interval
+(x-axis) and the average number of steps taken, averaged across all
+weekday days or weekend days (y-axis). See the README file in the GitHub
+repository to see an example of what this plot should look like using
+simulated data. ##so just like the initial time series plot, we repeat
+the function for newactivity2 ##the average number of step averaged
+across the 5-minute interval ##create new data frame
+newinterval<-aggregate(steps~interval+daytype,newactivity2,mean)
+names(newinterval)[3]<-“mean_steps” head(newinterval,5) ##to plot we
+nned to load the program lattice library(lattice)
+xyplot(mean_steps~interval|daytype,newinterval,type=“l”,layout=c(1,2)),
+main=“Time series plot of the 5-minute Intervaland the average number of
+steps taken,Averaged across all weekday Days or weekend
+days”,xlab=“5-minute interval”,ylab=“average number of steps taken”)
+xyplot( mean_steps ~ interval | daytype, newinterval, type = “l”, layout
+= c(1,2), main = “Time Series Plot of the 5-Minute Intervalthe Average
+Number of Steps Taken,Averaged Across All Weekday Days or Weekend Days”,
+xlab = “5-Minute Interval”, ylab = “Average Number of Steps Taken”
+
